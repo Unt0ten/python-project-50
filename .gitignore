@@ -1,7 +1,7 @@
 .venv/
 .venv
 gendiff/scripts/__pycache__
-#gendiff/games/__pycache__
+gendiff/__pycache__
 #brain_games/__pycache__
 /dist/
 dist/*
