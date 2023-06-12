@@ -16,6 +16,11 @@ package-install:
 lint:
 	poetry run flake8 gendiff
 
+lint-install:
+	poetry add --group dev flake8
+
 test:
 	poetry run pytest
 
+test-coverage:
+	poetry run pytest --cov=python-project-50 --cov-report xml
