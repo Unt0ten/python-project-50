@@ -35,15 +35,16 @@ def generate_diff(file1, file2):
                 new_key1 = ' - ' + key1
                 new_json.update({new_key1: format_value(file1[key1])})
 
-            elif key1 in file2:
+            else:
                 if file1[key1] != file2[key1]:
                     new_key1 = ' - ' + key1
                     new_json.update({new_key1: format_value(file1[key1])})
                     new_key2 = ' + ' + key1
                     new_json.update({new_key2: format_value(file2[key1])})
-                else:
-                    new_key1 = '   ' + key1
-                    new_json.update({new_key1: format_value(file1[key1])})
+                    break
+
+                new_key1 = '   ' + key1
+                new_json.update({new_key1: format_value(file1[key1])})
 
             if key2 not in file1:
                 new_key2 = ' + ' + key2
