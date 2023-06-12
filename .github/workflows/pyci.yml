@@ -24,3 +24,5 @@ jobs:
           make install
           make lint-install
       - name: Run linter and pytest
+        run: |
+          make lint
