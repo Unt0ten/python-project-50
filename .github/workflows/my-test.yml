@@ -5,6 +5,8 @@ on:
   - pull_request
 
 jobs:
+  my_testing:
+    runs-on: ubuntu-latest
     steps:
         # make depends on poetry
       - name: Install dependencies
