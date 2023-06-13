@@ -1,25 +1,27 @@
-name: Python-CI
+name: Python CI
 
 on:
   - push
   - pull_request
 
 jobs:
-  make_depends:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # we want to test our package on several versions of Python
+        python-version: [3.10.0]
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
         # make depends on poetry
       - name: Install dependencies
         run: |
           pip install poetry
           make install
-          make build
-          make lint-install
-
-  make_testing:
-    runs-on: ubuntu-latest
-    needs: [make_depends]
-    steps:
       - name: Run linter and pytest
         run: |
           make lint
