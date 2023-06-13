@@ -1,16 +1,10 @@
-name: Python CI
+name: Python-CI
 
 on:
   - push
   - pull_request
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # we want to test our package on several versions of Python
-        python-version: [3.10.0]
     steps:
         # make depends on poetry
       - name: Install dependencies
