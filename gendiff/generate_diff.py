@@ -1,6 +1,3 @@
-import json
-
-
 def format_value(value):
     '''
     This function formats bool and Nonetype dictionary values from .py to .json.
@@ -25,29 +22,27 @@ def to_string(dict_):
 
 
 def generate_diff(file1, file2):
-    file1 = json.load(open(file1))
-    file2 = json.load(open(file2))
-    new_json = {}
+    new_dict = {}
     for key2, item2 in sorted(file2.items()):
         for key1, item1 in sorted(file1.items()):
 
             if key1 not in file2:
                 new_key1 = ' - ' + key1
-                new_json.update({new_key1: format_value(file1[key1])})
+                new_dict.update({new_key1: format_value(file1[key1])})
 
             else:
                 if file1[key1] != file2[key1]:
                     new_key1 = ' - ' + key1
-                    new_json.update({new_key1: format_value(file1[key1])})
+                    new_dict.update({new_key1: format_value(file1[key1])})
                     new_key2 = ' + ' + key1
-                    new_json.update({new_key2: format_value(file2[key1])})
-                    break
+                    new_dict.update({new_key2: format_value(file2[key1])})
 
-                new_key1 = '   ' + key1
-                new_json.update({new_key1: format_value(file1[key1])})
+                else:
+                    new_key1 = '   ' + key1
+                    new_dict.update({new_key1: format_value(file1[key1])})
 
             if key2 not in file1:
                 new_key2 = ' + ' + key2
-                new_json.update({new_key2: format_value(file2[key2])})
+                new_dict.update({new_key2: format_value(file2[key2])})
 
-    return to_string(new_json)
+    return to_string(new_dict)

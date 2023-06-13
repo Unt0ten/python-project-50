@@ -1,7 +1,8 @@
 from gendiff import generate_diff, to_string, format_value
 
-FILE1 = 'tests/fixtures/file1.json'
-FILE2 = 'tests/fixtures/file2.json'
+FILE1 = {"host": "hexlet.io", "timeout": 50, "proxy": "123.234.53.22",
+         "follow": False}
+FILE2 = {"timeout": 20, "verbose": True, "host": "hexlet.io"}
 
 
 def test_generate_diff():
