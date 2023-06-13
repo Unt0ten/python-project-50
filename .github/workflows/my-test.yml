@@ -13,6 +13,7 @@ jobs:
         run: |
           pip install poetry
           make install
+          make build
           make lint-install
 
   make_testing:
