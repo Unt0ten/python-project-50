@@ -2,7 +2,7 @@
 .venv
 gendiff/scripts/__pycache__
 gendiff/__pycache__
-#brain_games/__pycache__
+tests/__pycache__/
 /dist/
 dist/*
 dist/hexlet_code-0.1.0-py3-none-any.whl
