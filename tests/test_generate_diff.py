@@ -1,4 +1,4 @@
-from gendiff import generate_diff
+from gendiff import generate_diff, to_string, format_value
 
 FILE1 = 'tests/fixtures/file1.json'
 FILE2 = 'tests/fixtures/file2.json'
@@ -14,3 +14,19 @@ def test_generate_diff():
               f' + verbose: true\n'
               f'}}')
     assert generate_diff(FILE1, FILE2) == string
+
+
+def test_to_string():
+    string = (f'{{\n'
+              f'foo: bar\n'
+              f'feez: baaz\n'
+              f'}}')
+    assert to_string({'foo': 'bar', 'feez': 'baaz'}) == string
+    assert to_string({}) == (f'{{\n'
+                             f'}}')
+
+
+def test_format_value():
+    assert format_value(True) == 'true'
+    assert format_value(None) == 'null'
+    assert format_value('foo') == 'foo'
