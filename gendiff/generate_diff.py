@@ -22,6 +22,16 @@ def to_string(dict_):
 
 
 def generate_diff(file1, file2):
+    '''
+    The diff is built based on how the content in the second file has changed
+    relative to the first.
+    Keys are displayed in alphabetical order.
+
+    The absence of a plus or minus indicates that the key is in both files,
+    and its values are the same.
+    In all other situations, the key value is either different,
+    or the key is in only one file.
+    '''
     new_dict = {}
     for key2, item2 in sorted(file2.items()):
         for key1, item1 in sorted(file1.items()):

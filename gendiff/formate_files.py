@@ -4,6 +4,9 @@ import json
 
 
 def formate_files(file):
+
+    '''Parsing json and yaml files'''
+
     if file.endswith('.json'):
         result = json.load(open(file))
 
