@@ -10,8 +10,17 @@ def test_formate_files_json():
     assert formate_files(file) == result
 
 
-def test_fomate_files_yaml():
+def test_formate_files_yaml():
     file = 'tests/fixtures/file1.yaml'
+    result = {'author': 'Charles R. Saunders', 'language': 'English',
+              'publication-year': 1981,
+              'pages': 224}
+
+    assert formate_files(file) == result
+
+
+def test_formate_files_yml():
+    file = 'tests/fixtures/file.yml'
     result = {'author': 'Charles R. Saunders', 'language': 'English',
               'publication-year': 1981,
               'pages': 224}
