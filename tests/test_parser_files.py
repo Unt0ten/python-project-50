@@ -1,4 +1,4 @@
-from gendiff import parser_files
+from gendiff.parser_files import get_data
 
 
 def test_parser_files_json():
@@ -7,7 +7,7 @@ def test_parser_files_json():
               "proxy": "123.234.53.22",
               "follow": False}
 
-    assert parser_files(file) == result
+    assert get_data(file) == result
 
 
 def test_parser_files_yaml():
@@ -16,7 +16,7 @@ def test_parser_files_yaml():
               'publication-year': 1981,
               'pages': 224}
 
-    assert parser_files(file) == result
+    assert get_data(file) == result
 
 
 def test_parser_files_yml():
@@ -25,4 +25,4 @@ def test_parser_files_yml():
               'publication-year': 1981,
               'pages': 224}
 
-    assert parser_files(file) == result
+    assert get_data(file) == result
