@@ -10,48 +10,32 @@ def format_value(value):
         return value
 
 
-def to_string(dict_, string=''):
-    '''
-    This function formats the dictionary into a string.
-    '''
-    for k, v in dict_.items():
-        string += f'  {k}: {v}\n'
-    string = f'{{\n{string}}}'
-    return string
+def generate_diff(file_path1, file_path2):
 
+    def inner(data1, data2):
+        diff = {}
+        for key in sorted(data1.keys() | data2.keys()):
 
-def generate_diff(file1, file2):
-    '''
-    The diff is built based on how the content in the second file has changed
-    relative to the first.
-    Keys are displayed in alphabetical order.
-
-    The absence of a plus or minus indicates that the key is in both files,
-    and its values are the same.
-    In all other situations, the key value is either different,
-    or the key is in only one file.
-    '''
-    new_dict = {}
-    for key2 in sorted(file2.keys()):
-        for key1 in sorted(file1.keys()):
-
-            if key1 not in file2:
-                new_key1 = '- ' + key1
-                new_dict.update({new_key1: format_value(file1[key1])})
-
+            if key in data1 and key not in data2:
+                new_key = '- ' + key
+                diff.update({new_key: data1[key]})
+            elif key not in data1 and key in data2:
+                new_key = '+ ' + key
+                diff.update({new_key: data2[key]})
             else:
-                if file1[key1] != file2[key1]:
-                    new_key1 = '- ' + key1
-                    new_dict.update({new_key1: format_value(file1[key1])})
-                    new_key2 = '+ ' + key1
-                    new_dict.update({new_key2: format_value(file2[key1])})
-
+                if data1[key] == data2[key]:
+                    new_key = '  ' + key
+                    diff.update({new_key: data1[key]})
                 else:
-                    new_key1 = '  ' + key1
-                    new_dict.update({new_key1: format_value(file1[key1])})
+                    if isinstance(data1[key], dict) and isinstance(data2[key], dict):
+                        new_key = '  ' + key
+                        diff.update({new_key: inner(data1[key], data2[key])})
+                    else:
+                        new_key1 = '- ' + key
+                        diff.update({new_key1: data1[key]})
+                        new_key2 = '+ ' + key
+                        diff.update({new_key2: data2[key]})
 
-            if key2 not in file1:
-                new_key2 = '+ ' + key2
-                new_dict.update({new_key2: format_value(file2[key2])})
+        return diff
 
-    return to_string(new_dict)
+    return inner(file_path1, file_path2)

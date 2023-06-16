@@ -1,30 +1,31 @@
-from gendiff import generate_diff, to_string, format_value
-
-FILE1 = {"host": "hexlet.io", "timeout": 50, "proxy": "123.234.53.22",
-         "follow": False}
-FILE2 = {"timeout": 20, "verbose": True, "host": "hexlet.io"}
-
-
-def test_generate_diff():
-    string = (f'{{\n'
-              f'  - follow: false\n'
-              f'    host: hexlet.io\n'
-              f'  - proxy: 123.234.53.22\n'
-              f'  - timeout: 50\n'
-              f'  + timeout: 20\n'
-              f'  + verbose: true\n'
-              f'}}')
-    assert generate_diff(FILE1, FILE2) == string
+from gendiff import generate_diff, format_value
+from fixtures import file1_test_generate_diff_trees
+from fixtures import file2_test_generate_diff_trees
+from fixtures import result_generate_diff_trees
 
 
-def test_to_string():
-    string = (f'{{\n'
-              f'  foo: bar\n'
-              f'  feez: baaz\n'
-              f'}}')
-    assert to_string({'foo': 'bar', 'feez': 'baaz'}) == string
-    assert to_string({}) == (f'{{\n'
-                             f'}}')
+def read(file_path):
+    with open(file_path, 'r') as f:
+        result = f.read()
+    return result
+
+
+def test_generate_diff_flat_files():
+    file1 = {"host": "hexlet.io", "timeout": 50, "proxy": "123.234.53.22",
+             "follow": False}
+    file2 = {"timeout": 20, "verbose": True, "host": "hexlet.io"}
+    dict_ = {'- follow': False, '  host': 'hexlet.io',
+             '- proxy': '123.234.53.22', '- timeout': 50, '+ timeout': 20,
+             '+ verbose': True}
+    assert generate_diff(file1, file2) == dict_
+
+
+def test_generate_diff_trees():
+    file1 = file1_test_generate_diff_trees.dict_
+    file2 = file2_test_generate_diff_trees.dict_
+    result = result_generate_diff_trees.result
+
+    assert generate_diff(file1, file2) == result
 
 
 def test_format_value():
