@@ -3,7 +3,7 @@ from yaml.loader import SafeLoader
 import json
 
 
-def formate_files(file):
+def parser_files(file):
 
     '''Parsing json and yaml files'''
 

@@ -1,3 +1,6 @@
+from gendiff import parser_files
+
+
 def format_value(value):
     '''
     This function formats bool and Nonetype dictionary values from .py to .json.
@@ -11,7 +14,6 @@ def format_value(value):
 
 
 def generate_diff(file_path1, file_path2):
-
     def inner(data1, data2):
         diff = {}
         for key in sorted(data1.keys() | data2.keys()):
@@ -27,7 +29,8 @@ def generate_diff(file_path1, file_path2):
                     new_key = '  ' + key
                     diff.update({new_key: data1[key]})
                 else:
-                    if isinstance(data1[key], dict) and isinstance(data2[key], dict):
+                    if isinstance(data1[key], dict) and isinstance(data2[key],
+                                                                   dict):
                         new_key = '  ' + key
                         diff.update({new_key: inner(data1[key], data2[key])})
                     else:
