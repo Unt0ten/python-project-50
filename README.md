@@ -9,3 +9,6 @@ Example of the generate_diff module from json files:
 
 Example of the generate_diff module from yaml files:
 [![asciicast](https://asciinema.org/a/DoaGjqukFPWf8IBSZqCDijiGD.svg)](https://asciinema.org/a/DoaGjqukFPWf8IBSZqCDijiGD)
+
+step6
+[![asciicast](https://asciinema.org/a/c1EoQI3j8OUHP3AXkNBuNqvrC.svg)](https://asciinema.org/a/c1EoQI3j8OUHP3AXkNBuNqvrC)
