@@ -1,0 +1,12 @@
+list_level_1:
+  list_level_2:
+    element1
+    element2
+    element3
+    element6
+  list_level_3:
+    key: foo
+    fox: grey
+list_level_3:
+      200
+      

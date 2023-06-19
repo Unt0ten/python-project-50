@@ -1,0 +1,22 @@
+{
+    common: {
+      + follow: false
+      - setting3: true
+      + setting3: null
+        setting6: {
+            doge: {
+              - wow: 
+              + wow: so much
+            }
+            key: value
+        }
+    }
+  - group1: {
+        nest: {
+            key: value
+        }
+    }
+  + group3: {
+        deep: []
+    }
+}

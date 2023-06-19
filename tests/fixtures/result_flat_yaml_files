@@ -1,0 +1,9 @@
+{
+    author: Charles R. Saunders
+  + genre: fiction
+    language: English
+  - pages: 224
+  + pages: 254
+  - publication-year: 1981
+  + publication-year: 1976
+}
