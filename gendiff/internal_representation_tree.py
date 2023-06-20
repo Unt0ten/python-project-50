@@ -3,7 +3,6 @@ def isdict(data):
 
 
 def make_node(key, value, status='unused'):
-
     """Return node"""
 
     if isinstance(value, list):
@@ -26,48 +25,42 @@ def make_node(key, value, status='unused'):
 
 
 def is_directory(node):
-
     """Check is node a directory"""
 
     return node['type'] == 'directory'
 
 
 def get_children(directory):
-
     """Return children of directory"""
 
     return directory['children']
 
 
 def get_value(leaf):
-
     """Return value of leaf"""
 
     return leaf['value']
 
 
 def get_status(node):
-
     """Return status of node"""
 
     return node['status']
 
 
 def get_name(node):
-
     """Return name of node"""
 
     return node['name']
 
 
 def get_type(node):
-
     """Return name of node"""
 
     return node['type']
 
-def determine_status_node(node):
 
+def determine_status_node(node):
     if get_name(node).startswith('  '):
         node['status'] = 'changed'
         node['name'] = get_name(node).replace('  ', '')

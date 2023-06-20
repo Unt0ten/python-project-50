@@ -1,5 +1,4 @@
 def format_value(value):
-
     '''
     This function formats bool and Nonetype dictionary values from .py to .json.
     '''
