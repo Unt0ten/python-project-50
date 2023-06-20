@@ -1,10 +1,31 @@
-from gendiff.stylish import stylish
+from gendiff.formatters.stylish_module import stylish, get_nesting_depth
+from gendiff.formatters.stylish_module import make_new_node_name
+from gendiff.formatters.format_value_module import format_value
 
 
 def read(file_path):
     with open(file_path, 'r') as f:
         result = f.read()
     return result
+
+
+def test_make_new_node_name():
+    assert make_new_node_name('key', 'changed') == '  key'
+    assert make_new_node_name('key', 'deleted') == '- key'
+    assert make_new_node_name('key', 'added') == '+ key'
+    assert make_new_node_name('key', 'unchanged') == '  key'
+    assert make_new_node_name('key', 'unused') == 'key'
+
+
+def test_get_nesting_depth():
+    assert get_nesting_depth(1, 'unused') == 4
+    assert get_nesting_depth(1, 'added') == 2
+
+
+def test_format_value():
+    assert format_value(True) == 'true'
+    assert format_value(None) == 'null'
+    assert format_value('foo') == 'foo'
 
 
 def test_stylish():

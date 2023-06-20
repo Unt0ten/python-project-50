@@ -1,7 +1,5 @@
-from gendiff.stylish import format_value
 from gendiff.internal_representation_tree import gen_tree
 from gendiff.generate_diff import generate_diff
-import yaml
 import json
 
 
@@ -11,15 +9,7 @@ def read(file_path):
     return result
 
 
-def test_format_value():
-
-    assert format_value(True) == 'true'
-    assert format_value(None) == 'null'
-    assert format_value('foo') == 'foo'
-
-
 def test_generate_diff():
-
     assert generate_diff('tests/fixtures/file1.json',
                          'tests/fixtures/file2.json') == read(
         'tests/fixtures/result_flat_json_files')
