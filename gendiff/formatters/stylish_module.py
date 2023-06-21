@@ -37,16 +37,15 @@ def make_new_node_name(name, status):
 
 
 def stylish(tree):
-    def format_stylish(tree, ident=DIVE, symbol=' '):
-        string = ''
+    def format_stylish(tree, ident=DIVE, string='', symbol=' '):
         for node in tree:
+            name = get_name(node)
+            status = get_status(node)
+            new_name = make_new_node_name(name, status)
+            deep = get_nesting_depth(ident, status)
 
             if is_directory(node):
-                name = get_name(node)
                 children = get_children(node)
-                status = get_status(node)
-                new_name = make_new_node_name(name, status)
-                deep = get_nesting_depth(ident, status)
                 string += f'\n{symbol * deep}{new_name}: ' \
                           f'{{{format_stylish(children, ident + DIVE)}'
 
@@ -54,11 +53,7 @@ def stylish(tree):
                 string += f'\n{symbol * deep}}}'
 
             else:
-                name = get_name(node)
                 value = get_value(node)
-                status = get_status(node)
-                new_name = make_new_node_name(name, status)
-                deep = get_nesting_depth(ident, status)
                 string += f'\n{symbol * deep}{new_name}: ' \
                           f'{format_value(value)}'
 
