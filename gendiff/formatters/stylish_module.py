@@ -67,7 +67,8 @@ def stylish(tree):
             if isinstance(value, list):
                 deep = get_nesting_depth(ident, status)
                 string += f'\n{symbol * deep}{new_name}: ' \
-                          f'{{{format_stylish(format_value(value), ident + DIVE)}'
+                          f'{{' \
+                          f'{format_stylish(format_value(value), ident + DIVE)}'
 
                 deep = NUM_INDENTS * ident
                 string += f'\n{symbol * deep}}}'
