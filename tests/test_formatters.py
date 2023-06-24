@@ -30,38 +30,52 @@ def test_format_value():
 
 def test_stylish():
     tree_flat = [
-        {'name': 'follow', 'value': False, 'status': 'deleted', 'type': 'leaf'},
-        {'name': 'host', 'value': 'hexlet.io', 'status': 'unchanged',
-         'type': 'leaf'},
-        {'name': 'proxy', 'value': '123.234.53.22', 'status': 'deleted',
-         'type': 'leaf'},
-        {'name': 'timeout', 'value': 50, 'status': 'deleted', 'type': 'leaf'},
-        {'name': 'timeout', 'value': 20, 'status': 'added', 'type': 'leaf'},
-        {'name': 'verbose', 'value': True, 'status': 'added', 'type': 'leaf'}]
+        {'name': 'follow', 'value': False, 'status': 'deleted'},
+        {'name': 'host', 'value': 'hexlet.io', 'status': 'unchanged'},
+        {'name': 'proxy', 'value': '123.234.53.22', 'status': 'deleted'},
+        {'name': 'timeout', 'value': 50, 'status': 'deleted'},
+        {'name': 'timeout', 'value': 20, 'status': 'added'},
+        {'name': 'verbose', 'value': True, 'status': 'added'}]
 
-    tree_nested = [{'name': 'common', 'children': [
-        {'name': 'follow', 'value': False, 'status': 'added', 'type': 'leaf'},
-        {'name': 'setting3', 'value': True, 'status': 'deleted',
-         'type': 'leaf'},
-        {'name': 'setting3', 'value': None, 'status': 'added', 'type': 'leaf'},
-        {'name': 'setting6', 'children': [{'name': 'doge', 'children': [
-            {'name': 'wow', 'value': '', 'status': 'deleted', 'type': 'leaf'},
-            {'name': 'wow', 'value': 'so much', 'status': 'added',
-             'type': 'leaf'}], 'status': 'changed', 'type': 'directory'},
-                                          {'name': 'key', 'value': 'value',
-                                           'status': 'unchanged',
-                                           'type': 'leaf'}],
-         'status': 'changed', 'type': 'directory'}], 'status': 'changed',
-                    'type': 'directory'}, {'name': 'group1', 'children': [
-        {'name': 'nest', 'children': [
-            {'name': 'key', 'value': 'value', 'status': 'unused',
-             'type': 'leaf'}], 'status': 'unused', 'type': 'directory'}],
-                                           'status': 'deleted',
-                                           'type': 'directory'},
-                   {'name': 'group3', 'children': [
-                       {'name': 'deep', 'value': [], 'status': 'unused',
-                        'type': 'leaf'}], 'status': 'added',
-                    'type': 'directory'}]
+    tree_nested = [{'name': 'common', 'value': [
+        {'name': 'follow', 'value': False, 'status': 'added'},
+        {'name': 'setting1', 'value': 'Value 1', 'status': 'unchanged'},
+        {'name': 'setting2', 'value': 200, 'status': 'deleted'},
+        {'name': 'setting3', 'value': True, 'status': 'upd_del'},
+        {'name': 'setting3', 'value': None, 'status': 'upd_add'},
+        {'name': 'setting4', 'value': 'blah blah', 'status': 'added'},
+        {'name': 'setting5', 'value': {'key5': 'value5'}, 'status': 'added'},
+        {'name': 'setting6', 'value': [{'name': 'doge', 'value': [
+            {'name': 'wow', 'value': '', 'status': 'upd_del'},
+            {'name': 'wow', 'value': 'so much', 'status': 'upd_add'}],
+                                        'status': 'changed'},
+                                       {'name': 'key', 'value': 'value',
+                                        'status': 'unchanged'},
+                                       {'name': 'ops', 'value': 'vops',
+                                        'status': 'added'}],
+         'status': 'changed'}], 'status': 'changed'},
+                   {'name': 'group1', 'value': [
+                       {'name': 'baz', 'value': 'bas', 'status': 'upd_del'},
+                       {'name': 'baz',
+                        'value': 'bars',
+                        'status': 'upd_add'},
+                       {'name': 'foo',
+                        'value': 'bar',
+                        'status': 'unchanged'},
+                       {
+                           'name': 'nest',
+                           'value': {
+                               'key': 'value'},
+                           'status': 'upd_del'},
+                       {
+                           'name': 'nest',
+                           'value': 'str',
+                           'status': 'upd_add'}],
+                    'status': 'changed'},
+                   {'name': 'group2',
+                    'value': {'abc': 12345, 'deep': {'id': 45}},
+                    'status': 'deleted'}, {'name': 'group3', 'value': {
+            'deep': {'id': {'number': 45}}, 'fee': 100500}, 'status': 'added'}]
 
     assert stylish(tree_nested) == read('tests/fixtures/result_stylish')
     assert stylish(tree_flat) == read('tests/fixtures/result_flat_json_files')
