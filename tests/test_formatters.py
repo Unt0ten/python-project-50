@@ -9,19 +9,20 @@ from gendiff.formatters.plain_module import set_quotes
 from gendiff.formatters.plain_module import convert_value
 from gendiff.formatters.plain_module import make_string_flat
 from gendiff.formatters.plain_module import make_string_nested
+from gendiff.formatters.json_module import make_json
 import pytest
 
 
 @pytest.fixture
 def flat():
     return [
-        {'name': 'follow', 'value': False, 'status': 'deleted'},
-        {'name': 'host', 'value': 'hexlet.io', 'status': 'unchanged'},
-        {'name': 'proxy', 'value': '123.234.53.22', 'status': 'deleted'},
-        {'name': 'timeout', 'value': 50, 'status': 'upd_del'},
-        {'name': 'timeout', 'value': 20, 'status': 'upd_add'},
-        {'name': 'verbose', 'value': True, 'status': 'added'}
-        ]
+            {'name': 'follow', 'value': False, 'status': 'deleted'},
+            {'name': 'host', 'value': 'hexlet.io', 'status': 'unchanged'},
+            {'name': 'proxy', 'value': '123.234.53.22', 'status': 'deleted'},
+            {'name': 'timeout', 'value': 50, 'status': 'upd_del'},
+            {'name': 'timeout', 'value': 20, 'status': 'upd_add'},
+            {'name': 'verbose', 'value': True, 'status': 'added'}
+            ]
 
 
 @pytest.fixture
@@ -169,3 +170,10 @@ def test_make_string_nested():
 def test_plain(nested, flat):
     assert plain(flat) == read('tests/fixtures/result_plain_flat')
     assert plain(nested) == read('tests/fixtures/result_plain_nested')
+
+
+def test_make_json(nested, flat):
+    result_nested = make_json(nested)
+    result_flat = make_json(flat)
+    assert result_nested == read('tests/fixtures/result_to_json_nested.txt')
+    assert result_flat == read('tests/fixtures/result_to_json_flat.txt')
