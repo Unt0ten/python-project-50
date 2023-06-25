@@ -1,5 +1,10 @@
 from gendiff import internal_representation_tree as get
 import json
+import pytest
+
+@pytest.fixture
+def node():
+    return {'name': 'key', 'value': 'foo', 'status': 'unused'}
 
 
 def test_get_diff_data_flat_files():
@@ -57,36 +62,27 @@ def test_get_diff_data_trees():
     assert get.get_diff_data(file1, file2) == result
 
 
-def test_isdict():
-    data1 = {'key': 'value'}
+def test_isdict(node):
+    data1 = node
     data2 = []
 
     assert get.isdict(data2) is False
     assert get.isdict(data1) is True
 
 
-def test_make_node():
-    result = {'name': 'key', 'value': 'foo', 'status': 'unused'}
+def test_make_node(node):
+    result = node
 
     assert get.make_node('key', 'foo') == result
 
 
-def test_get_value():
-    node = {'name': 'key', 'value': 'foo',
-            'status': 'unused'}
-
+def test_get_value(node):
     assert get.get_value(node) == 'foo'
 
 
-def test_get_status():
-    node = {'name': 'key', 'value': 'foo',
-            'status': 'unused'}
-
+def test_get_status(node):
     assert get.get_status(node) == 'unused'
 
 
-def test_get_name():
-    node = {'name': 'key', 'value': 'foo',
-            'status': 'unused'}
-
+def test_get_name(node):
     assert get.get_name(node) == 'key'

@@ -1,7 +1,14 @@
 from gendiff.formatters.stylish_module import stylish, get_nesting_depth
 from gendiff.formatters.stylish_module import make_new_node_name
+from gendiff.formatters.stylish_module import make_inner
 from gendiff.formatters.format_value_module import format_value
 from gendiff.formatters.plain_module import plain
+from gendiff.formatters.plain_module import check_complex
+from gendiff.formatters.plain_module import get_value_updated
+from gendiff.formatters.plain_module import set_quotes
+from gendiff.formatters.plain_module import convert_value
+from gendiff.formatters.plain_module import make_string_flat
+from gendiff.formatters.plain_module import make_string_nested
 import pytest
 
 
@@ -70,8 +77,9 @@ def test_make_new_node_name():
     assert make_new_node_name('key', 'changed') == '  key'
     assert make_new_node_name('key', 'deleted') == '- key'
     assert make_new_node_name('key', 'added') == '+ key'
-    assert make_new_node_name('key', 'unchanged') == '  key'
     assert make_new_node_name('key', 'unused') == 'key'
+    assert make_new_node_name('key', 'upd_add') == '+ key'
+    assert make_new_node_name('key', 'upd_del') == '- key'
 
 
 def test_get_nesting_depth():
@@ -85,9 +93,77 @@ def test_format_value():
     assert format_value('foo') == 'foo'
 
 
+def test_make_inner():
+    value_dict = {'deep': {'id': {'number': 45}}, 'fee': 100500}
+    value_list = [{'deep': {'id': {'number': 45}}, 'fee': 100500}]
+    result_value_dict = [{'name': 'deep', 'value': [
+        {'name': 'id', 'value': [
+            {'name': 'number', 'value': 45, 'status': 'unused'}],
+         'status': 'unused'}], 'status': 'unused'},
+                         {'name': 'fee', 'value': 100500, 'status': 'unused'}]
+
+    assert make_inner(value_dict) == result_value_dict
+    assert make_inner(value_list) == value_list
+    assert make_inner('foo') == 'foo'
+
+
 def test_stylish(nested, flat):
     assert stylish(nested) == read('tests/fixtures/result_stylish')
     assert stylish(flat) == read('tests/fixtures/result_flat_json_files')
+
+
+def test_check_complex():
+    data1 = ['asd', 'qwerty']
+    data2 = {'foo': 'bar'}
+    data3 = 'baz'
+
+    assert check_complex(data1) == '[complex value]'
+    assert check_complex(data2) == '[complex value]'
+    assert check_complex(data3) == 'baz'
+
+
+def test_get_value_updated():
+    node1 = {'name': 'setting3', 'value': True, 'status': 'upd_del'}
+    node2 = {'name': 'setting3', 'value': None, 'status': 'upd_add'}
+
+    assert get_value_updated(node1, 'upd_del') == 'true'
+    assert get_value_updated(node2, 'upd_add') == 'null'
+
+
+def test_set_quotes():
+    assert set_quotes('true') == 'true'
+    assert set_quotes('false') == 'false'
+    assert set_quotes('null') == 'null'
+    assert set_quotes('[complex value]') == '[complex value]'
+    assert set_quotes(10) == 10
+    assert set_quotes('fiz') == "'fiz'"
+
+
+def test_convert_value():
+    assert convert_value({'fiz': 'baz'}) == '[complex value]'
+    assert convert_value(['fiz', 'baz']) == '[complex value]'
+    assert convert_value(10) == 10
+    assert convert_value(False) == 'false'
+    assert convert_value('asd') == "'asd'"
+    assert convert_value(None) == 'null'
+
+
+def test_make_string_flat():
+    assert make_string_flat(['group1'], 'asd',
+                            'deleted') == "Property 'group1' was removed" + "\n"
+    assert make_string_flat(['common', 'follow'], False,
+                            'added') == \
+           "Property 'common.follow' was added with value: false" + "\n"
+
+
+def test_make_string_nested():
+    node_del = {'name': 'setting3', 'value': True, 'status': 'upd_del'}
+    node_add = {'name': 'setting3', 'value': None, 'status': 'upd_add'}
+    assert make_string_nested(['common', 'setting3'], node_del,
+                              'upd_del') == \
+           "Property 'common.setting3' was updated. From true"
+    assert make_string_nested(['common', 'setting3'], node_add,
+                              'upd_add') == " to null" + "\n"
 
 
 def test_plain(nested, flat):
