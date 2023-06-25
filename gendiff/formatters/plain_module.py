@@ -5,7 +5,7 @@ from gendiff.internal_representation_tree import get_value, get_name, get_status
 def check_complex(value):
     if isinstance(value, list) or isinstance(value, dict):
         return "[complex value]"
-    return f"{value}"
+    return value
 
 
 def get_value_updated(node, status):
@@ -15,12 +15,26 @@ def get_value_updated(node, status):
         return format_value(get_value(node))
 
 
+def set_quotes(value):
+    results = ['true', 'false', 'null', '[complex value]']
+
+    if value in results or isinstance(value, int):
+        return value
+
+    return f"'{value}'"
+
+
+def convert_value(value):
+    result = set_quotes(format_value(check_complex(value)))
+    return result
+
+
 def make_string_flat(path, value, status):
     string = ''
 
     if status == 'added':
         string += f"Property '{'.'.join(path)}' " \
-                  f"was added with value: {check_complex(value)}\n"
+                  f"was added with value: {convert_value(value)}\n"
 
     elif status == 'deleted':
         string += f"Property '{'.'.join(path)}' was removed\n"
@@ -32,12 +46,12 @@ def make_string_nested(path, node, status):
     string = ''
 
     if status == 'upd_del':
-        old = check_complex(get_value_updated(node, 'upd_del'))
-        string += f"Property '{'.'.join(path)}' was updated. From '{old}'"
+        old = convert_value(get_value_updated(node, 'upd_del'))
+        string += f"Property '{'.'.join(path)}' was updated. From {old}"
 
     elif status == 'upd_add':
-        new = check_complex(get_value_updated(node, 'upd_add'))
-        string += f" to '{new}'\n"
+        new = convert_value(get_value_updated(node, 'upd_add'))
+        string += f" to {new}\n"
 
     return string
 
@@ -63,4 +77,6 @@ def plain(tree):
 
         return string
 
-    return inner(tree, [])
+    result = inner(tree, []).strip()
+
+    return result

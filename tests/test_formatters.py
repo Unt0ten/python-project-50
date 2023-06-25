@@ -1,6 +1,63 @@
 from gendiff.formatters.stylish_module import stylish, get_nesting_depth
 from gendiff.formatters.stylish_module import make_new_node_name
 from gendiff.formatters.format_value_module import format_value
+from gendiff.formatters.plain_module import plain
+import pytest
+
+
+@pytest.fixture
+def flat():
+    return [
+        {'name': 'follow', 'value': False, 'status': 'deleted'},
+        {'name': 'host', 'value': 'hexlet.io', 'status': 'unchanged'},
+        {'name': 'proxy', 'value': '123.234.53.22', 'status': 'deleted'},
+        {'name': 'timeout', 'value': 50, 'status': 'upd_del'},
+        {'name': 'timeout', 'value': 20, 'status': 'upd_add'},
+        {'name': 'verbose', 'value': True, 'status': 'added'}
+        ]
+
+
+@pytest.fixture
+def nested():
+    return [{'name': 'common', 'value': [
+        {'name': 'follow', 'value': False, 'status': 'added'},
+        {'name': 'setting1', 'value': 'Value 1', 'status': 'unchanged'},
+        {'name': 'setting2', 'value': 200, 'status': 'deleted'},
+        {'name': 'setting3', 'value': True, 'status': 'upd_del'},
+        {'name': 'setting3', 'value': None, 'status': 'upd_add'},
+        {'name': 'setting4', 'value': 'blah blah', 'status': 'added'},
+        {'name': 'setting5', 'value': {'key5': 'value5'}, 'status': 'added'},
+        {'name': 'setting6', 'value': [{'name': 'doge', 'value': [
+            {'name': 'wow', 'value': '', 'status': 'upd_del'},
+            {'name': 'wow', 'value': 'so much', 'status': 'upd_add'}],
+                                        'status': 'changed'},
+                                       {'name': 'key', 'value': 'value',
+                                        'status': 'unchanged'},
+                                       {'name': 'ops', 'value': 'vops',
+                                        'status': 'added'}],
+         'status': 'changed'}], 'status': 'changed'},
+            {'name': 'group1', 'value': [
+                {'name': 'baz', 'value': 'bas', 'status': 'upd_del'},
+                {'name': 'baz',
+                 'value': 'bars',
+                 'status': 'upd_add'},
+                {'name': 'foo',
+                 'value': 'bar',
+                 'status': 'unchanged'},
+                {
+                    'name': 'nest',
+                    'value': {
+                        'key': 'value'},
+                    'status': 'upd_del'},
+                {
+                    'name': 'nest',
+                    'value': 'str',
+                    'status': 'upd_add'}],
+             'status': 'changed'},
+            {'name': 'group2',
+             'value': {'abc': 12345, 'deep': {'id': 45}},
+             'status': 'deleted'}, {'name': 'group3', 'value': {
+            'deep': {'id': {'number': 45}}, 'fee': 100500}, 'status': 'added'}]
 
 
 def read(file_path):
@@ -28,54 +85,11 @@ def test_format_value():
     assert format_value('foo') == 'foo'
 
 
-def test_stylish():
-    tree_flat = [
-        {'name': 'follow', 'value': False, 'status': 'deleted'},
-        {'name': 'host', 'value': 'hexlet.io', 'status': 'unchanged'},
-        {'name': 'proxy', 'value': '123.234.53.22', 'status': 'deleted'},
-        {'name': 'timeout', 'value': 50, 'status': 'deleted'},
-        {'name': 'timeout', 'value': 20, 'status': 'added'},
-        {'name': 'verbose', 'value': True, 'status': 'added'}]
+def test_stylish(nested, flat):
+    assert stylish(nested) == read('tests/fixtures/result_stylish')
+    assert stylish(flat) == read('tests/fixtures/result_flat_json_files')
 
-    tree_nested = [{'name': 'common', 'value': [
-        {'name': 'follow', 'value': False, 'status': 'added'},
-        {'name': 'setting1', 'value': 'Value 1', 'status': 'unchanged'},
-        {'name': 'setting2', 'value': 200, 'status': 'deleted'},
-        {'name': 'setting3', 'value': True, 'status': 'upd_del'},
-        {'name': 'setting3', 'value': None, 'status': 'upd_add'},
-        {'name': 'setting4', 'value': 'blah blah', 'status': 'added'},
-        {'name': 'setting5', 'value': {'key5': 'value5'}, 'status': 'added'},
-        {'name': 'setting6', 'value': [{'name': 'doge', 'value': [
-            {'name': 'wow', 'value': '', 'status': 'upd_del'},
-            {'name': 'wow', 'value': 'so much', 'status': 'upd_add'}],
-                                        'status': 'changed'},
-                                       {'name': 'key', 'value': 'value',
-                                        'status': 'unchanged'},
-                                       {'name': 'ops', 'value': 'vops',
-                                        'status': 'added'}],
-         'status': 'changed'}], 'status': 'changed'},
-                   {'name': 'group1', 'value': [
-                       {'name': 'baz', 'value': 'bas', 'status': 'upd_del'},
-                       {'name': 'baz',
-                        'value': 'bars',
-                        'status': 'upd_add'},
-                       {'name': 'foo',
-                        'value': 'bar',
-                        'status': 'unchanged'},
-                       {
-                           'name': 'nest',
-                           'value': {
-                               'key': 'value'},
-                           'status': 'upd_del'},
-                       {
-                           'name': 'nest',
-                           'value': 'str',
-                           'status': 'upd_add'}],
-                    'status': 'changed'},
-                   {'name': 'group2',
-                    'value': {'abc': 12345, 'deep': {'id': 45}},
-                    'status': 'deleted'}, {'name': 'group3', 'value': {
-            'deep': {'id': {'number': 45}}, 'fee': 100500}, 'status': 'added'}]
 
-    assert stylish(tree_nested) == read('tests/fixtures/result_stylish')
-    assert stylish(tree_flat) == read('tests/fixtures/result_flat_json_files')
+def test_plain(nested, flat):
+    assert plain(flat) == read('tests/fixtures/result_plain_flat')
+    assert plain(nested) == read('tests/fixtures/result_plain_nested')
