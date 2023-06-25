@@ -8,8 +8,7 @@ def make_node(key, value, status='unused'):
     return {
         'name': key,
         'value': value,
-        'status': status,
-        }
+        'status': status}
 
 
 def get_value(node):

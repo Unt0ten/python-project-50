@@ -12,6 +12,7 @@ from gendiff.formatters.plain_module import make_string_nested
 from gendiff.formatters.json_module import make_json
 from gendiff.formatters.formater import apply_format
 import pytest
+import json
 
 
 @pytest.fixture
@@ -22,51 +23,15 @@ def flat():
         {'name': 'proxy', 'value': '123.234.53.22', 'status': 'deleted'},
         {'name': 'timeout', 'value': 50, 'status': 'upd_del'},
         {'name': 'timeout', 'value': 20, 'status': 'upd_add'},
-        {'name': 'verbose', 'value': True, 'status': 'added'}
-        ]
+        {'name': 'verbose', 'value': True, 'status': 'added'}]
 
 
 @pytest.fixture
 def nested():
-    return [{'name': 'common', 'value': [
-        {'name': 'follow', 'value': False, 'status': 'added'},
-        {'name': 'setting1', 'value': 'Value 1', 'status': 'unchanged'},
-        {'name': 'setting2', 'value': 200, 'status': 'deleted'},
-        {'name': 'setting3', 'value': True, 'status': 'upd_del'},
-        {'name': 'setting3', 'value': None, 'status': 'upd_add'},
-        {'name': 'setting4', 'value': 'blah blah', 'status': 'added'},
-        {'name': 'setting5', 'value': {'key5': 'value5'}, 'status': 'added'},
-        {'name': 'setting6', 'value': [{'name': 'doge', 'value': [
-            {'name': 'wow', 'value': '', 'status': 'upd_del'},
-            {'name': 'wow', 'value': 'so much', 'status': 'upd_add'}],
-                                        'status': 'changed'},
-                                       {'name': 'key', 'value': 'value',
-                                        'status': 'unchanged'},
-                                       {'name': 'ops', 'value': 'vops',
-                                        'status': 'added'}],
-         'status': 'changed'}], 'status': 'changed'},
-            {'name': 'group1', 'value': [
-                {'name': 'baz', 'value': 'bas', 'status': 'upd_del'},
-                {'name': 'baz',
-                 'value': 'bars',
-                 'status': 'upd_add'},
-                {'name': 'foo',
-                 'value': 'bar',
-                 'status': 'unchanged'},
-                {
-                    'name': 'nest',
-                    'value': {
-                        'key': 'value'},
-                    'status': 'upd_del'},
-                {
-                    'name': 'nest',
-                    'value': 'str',
-                    'status': 'upd_add'}],
-             'status': 'changed'},
-            {'name': 'group2',
-             'value': {'abc': 12345, 'deep': {'id': 45}},
-             'status': 'deleted'}, {'name': 'group3', 'value': {
-            'deep': {'id': {'number': 45}}, 'fee': 100500}, 'status': 'added'}]
+    result = "tests/fixtures/result_get_diff_data_trees.json"
+    with open(result, "r") as result:
+        diff_result = json.load(result)
+        return diff_result
 
 
 def read(file_path):

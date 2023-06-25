@@ -1,5 +1,4 @@
 from gendiff.generate_diff import generate_diff
-import json
 
 
 def read(file_path):
