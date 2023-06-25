@@ -63,13 +63,11 @@ def test_format_value():
 def test_make_inner():
     value_dict = {'deep': {'id': {'number': 45}}, 'fee': 100500}
     value_list = [{'deep': {'id': {'number': 45}}, 'fee': 100500}]
-    result_value_dict = [{'name': 'deep', 'value': [
-        {'name': 'id', 'value': [
-            {'name': 'number', 'value': 45, 'status': 'unused'}],
-         'status': 'unused'}], 'status': 'unused'},
-                         {'name': 'fee', 'value': 100500, 'status': 'unused'}]
+    result = "tests/fixtures/result_make_inner.json"
+    with open(result, "r") as result:
+        result = json.load(result)
+        assert make_inner(value_dict) == result
 
-    assert make_inner(value_dict) == result_value_dict
     assert make_inner(value_list) == value_list
     assert make_inner('foo') == 'foo'
 
