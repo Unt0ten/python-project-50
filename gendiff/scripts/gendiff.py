@@ -5,6 +5,7 @@ from gendiff.cli import parser_args
 
 
 def main():
+    '''Compares two configuration files and shows a difference'''
     args = parser_args()
     print(
         generate_diff(args.first_file, args.second_file, formater=args.format))

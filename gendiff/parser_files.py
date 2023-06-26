@@ -5,7 +5,6 @@ import json
 
 def get_data(file):
     '''Parsing json and yaml files'''
-
     if file.endswith('.json'):
         result = json.load(open(file))
 

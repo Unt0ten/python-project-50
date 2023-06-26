@@ -1,10 +1,10 @@
 def isdict(data):
+    '''Whether the object is a dictionary'''
     return isinstance(data, dict)
 
 
 def make_node(key, value, status='unused'):
     """Return node"""
-
     return {
         'name': key,
         'value': value,
@@ -12,6 +12,7 @@ def make_node(key, value, status='unused'):
 
 
 def get_value(node):
+    '''Getting node value'''
     return node['value']
 
 
@@ -26,11 +27,8 @@ def get_name(node):
 
 
 def get_diff_data(data1, data2):
-    '''
-    Returns the difference as a dictionary with information about changes
-    to keys and their values
-    '''
-
+    '''Returns the difference as a dictionary with information about changes
+    to keys and their values'''
     diff = []
     for key in sorted(data1.keys() | data2.keys()):
 

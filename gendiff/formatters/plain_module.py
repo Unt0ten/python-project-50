@@ -3,12 +3,21 @@ from gendiff.internal_representation_tree import get_value, get_name, get_status
 
 
 def check_complex(value):
+    '''Checking the node value for complexity'''
     if isinstance(value, list) or isinstance(value, dict):
         return "[complex value]"
     return value
 
 
 def get_value_updated(node, status):
+    '''
+    Node value conversion
+
+    :param node: formed diff node
+    :param status: status of the generated diff node
+    :return: final result
+
+    '''
     if status == 'upd_add':
         return format_value(get_value(node))
     elif status == 'upd_del':
@@ -16,6 +25,7 @@ def get_value_updated(node, status):
 
 
 def set_quotes(value):
+    '''Wrapping the value in quotes for output'''
     results = ['true', 'false', 'null', '[complex value]']
 
     if value in results or isinstance(value, int):
@@ -25,11 +35,27 @@ def set_quotes(value):
 
 
 def convert_value(value):
+    '''
+    Final value conversion
+
+    :param value: node value
+    :return: final result
+
+    '''
     result = set_quotes(format_value(check_complex(value)))
     return result
 
 
 def make_string_flat(path, value, status):
+    '''
+    Formation of a line depending on the status
+
+    :param path: path to the root of the modified value
+    :param value: node value
+    :param status: status of the generated diff node
+    :return: return a formed string
+
+    '''
     string = ''
 
     if status == 'added':
@@ -43,6 +69,15 @@ def make_string_flat(path, value, status):
 
 
 def make_string_nested(path, node, status):
+    '''
+    Formation of a line depending on the status
+
+    :param path: path to the root of the modified value
+    :param node: formed diff node
+    :param status: status of the generated diff node
+    :return: return a formed string
+
+    '''
     string = ''
 
     if status == 'upd_del':
@@ -56,12 +91,23 @@ def make_string_nested(path, node, status):
     return string
 
 
-def plain(tree):
-    def inner(tree, path):
+def plain(diff):
+    '''Diff output in "plain" format
 
+    :param diff: formed diff in the form of a tree
+    :return: return string as "plain" format
+
+    '''
+    def inner(diff, path):
+        '''
+
+        :param path: path to the root of the modified value
+        :return: return string
+
+        '''
         string = ''
 
-        for node in tree:
+        for node in diff:
 
             name = get_name(node)
             value = format_value(get_value(node))
@@ -77,6 +123,6 @@ def plain(tree):
 
         return string
 
-    result = inner(tree, []).strip()
+    result = inner(diff, []).strip()
 
     return result

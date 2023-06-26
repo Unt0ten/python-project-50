@@ -11,12 +11,26 @@ DIVE = 1
 
 
 def get_nesting_depth(ident, status):
+    '''Сalculating the length of indents of elements
+
+    :param ident: nesting level
+    :param status: node status
+    :return: indent length
+
+    '''
     if status != 'unused':
         return ident * NUM_INDENTS - SHIFT_LEFT
     return ident * NUM_INDENTS
 
 
 def make_new_node_name(name, status):
+    '''Generation of a new key name value depending on the status of the node
+
+    :param name: node name
+    :param status: node status
+    :return: new name meaning
+
+    '''
     if status == 'changed' or status == 'unchanged':
         new_name = '  ' + name
         return new_name
@@ -34,6 +48,13 @@ def make_new_node_name(name, status):
 
 
 def make_inner(value):
+    '''Formation of the internal representation
+        of the node not included in the diff
+
+    :param value: node value
+    :return: new node
+
+    '''
     new_node = []
 
     if isdict(value):
@@ -52,12 +73,23 @@ def make_inner(value):
     return new_node
 
 
-def stylish(tree):
-    def format_stylish(tree, ident=DIVE, symbol=' '):
+def stylish(diff):
+    '''Diff output in "stylish" format
 
+    :param diff: formed diff in the form of a tree
+    :return: return string as "plain" format
+
+    '''
+    def inner(diff, ident=DIVE, symbol=' '):
+        '''
+
+        :param path: path to the root of the modified value
+        :return: return string
+
+        '''
         string = ''
 
-        for node in tree:
+        for node in diff:
 
             name = get_name(node)
             value = make_inner(get_value(node))
@@ -68,7 +100,7 @@ def stylish(tree):
                 deep = get_nesting_depth(ident, status)
                 string += f'\n{symbol * deep}{new_name}: ' \
                           f'{{' \
-                          f'{format_stylish(format_value(value), ident + DIVE)}'
+                          f'{inner(format_value(value), ident + DIVE)}'
 
                 deep = NUM_INDENTS * ident
                 string += f'\n{symbol * deep}}}'
@@ -79,6 +111,6 @@ def stylish(tree):
 
         return string
 
-    result = format_stylish(tree)
+    result = inner(diff)
 
     return f'{{{result}\n}}'
