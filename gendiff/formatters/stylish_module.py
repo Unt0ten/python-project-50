@@ -81,12 +81,6 @@ def stylish(diff):
 
     '''
     def inner(diff, ident=DIVE, symbol=' '):
-        '''
-
-        :param path: path to the root of the modified value
-        :return: return string
-
-        '''
         string = ''
 
         for node in diff:
