@@ -53,7 +53,7 @@ def make_string_flat(path, value, status):
     :param path: path to the root of the modified value
     :param value: node value
     :param status: status of the generated diff node
-    :return: return a formed string
+    :return: a formed string
 
     '''
     string = ''
@@ -75,7 +75,7 @@ def make_string_nested(path, node, status):
     :param path: path to the root of the modified value
     :param node: formed diff node
     :param status: status of the generated diff node
-    :return: return a formed string
+    :return: a formed string
 
     '''
     string = ''
@@ -95,14 +95,14 @@ def plain(diff):
     '''Diff output in "plain" format
 
     :param diff: formed diff in the form of a tree
-    :return: return string as "plain" format
+    :return: string as "plain" format
 
     '''
     def inner(diff, path):
         '''
 
         :param path: path to the root of the modified value
-        :return: return string
+        :return: string
 
         '''
         string = ''

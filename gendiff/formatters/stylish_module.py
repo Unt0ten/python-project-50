@@ -77,7 +77,7 @@ def stylish(diff):
     '''Diff output in "stylish" format
 
     :param diff: formed diff in the form of a tree
-    :return: return string as "plain" format
+    :return: string as "plain" format
 
     '''
     def inner(diff, ident=DIVE, symbol=' '):
