@@ -43,8 +43,7 @@ def make_new_node_name(name, status):
         new_name = '+ ' + name
         return new_name
 
-    elif status == 'unused':
-        return name
+    return name
 
 
 def make_inner(value):

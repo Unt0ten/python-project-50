@@ -16,6 +16,7 @@ Requirements:
 python = "^3.10"
 pyyaml = "^6.0"
 
+Package installation: 'python3 -m pip install --user dist/*.whl' or 'make package-install' on in the current directory.
 
 Find differences for "json" files that have flat structures. "stylish" format (default).
 [![asciicast](https://asciinema.org/a/VH1ja9YxO3pPIkxAEpuxquS5Q.svg)](https://asciinema.org/a/VH1ja9YxO3pPIkxAEpuxquS5Q)
