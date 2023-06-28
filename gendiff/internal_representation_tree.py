@@ -30,13 +30,16 @@ def get_diff_data(data1, data2):
     '''Returns the difference as a dictionary with information about changes
     to keys and their values'''
     diff = []
+    deleted_keys = data1.keys() - data2.keys()
+    added_keys = data2.keys() - data1.keys()
+
     for key in sorted(data1.keys() | data2.keys()):
 
-        if key in data1 and key not in data2:
+        if key in deleted_keys:
             node = make_node(key, data1[key], 'deleted')
             diff.append(node)
 
-        elif key not in data1 and key in data2:
+        elif key in added_keys:
             node = make_node(key, data2[key], 'added')
             diff.append(node)
 
