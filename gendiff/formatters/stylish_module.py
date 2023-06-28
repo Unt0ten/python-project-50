@@ -1,8 +1,8 @@
-from gendiff.internal_representation_tree import get_status
-from gendiff.internal_representation_tree import get_name
-from gendiff.internal_representation_tree import get_value
-from gendiff.internal_representation_tree import isdict
-from gendiff.internal_representation_tree import make_node
+from gendiff.internal_representation_diff import get_status
+from gendiff.internal_representation_diff import get_name
+from gendiff.internal_representation_diff import get_value
+from gendiff.internal_representation_diff import isdict
+from gendiff.internal_representation_diff import make_node
 from gendiff.formatters.format_value_module import format_value
 
 NUM_INDENTS = 4

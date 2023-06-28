@@ -1,5 +1,5 @@
 from gendiff.formatters.format_value_module import format_value
-from gendiff.internal_representation_tree import get_value, get_name, get_status
+from gendiff.internal_representation_diff import get_value, get_name, get_status
 
 
 def check_complex(value):

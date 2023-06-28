@@ -1,4 +1,4 @@
-from gendiff import internal_representation_tree as get
+from gendiff import internal_representation_diff as get
 import json
 import pytest
 

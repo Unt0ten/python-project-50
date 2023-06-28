@@ -1,4 +1,4 @@
-from gendiff.internal_representation_tree import get_diff_data
+from gendiff.internal_representation_diff import get_diff_data
 from gendiff.parser_files import get_data
 from gendiff.formatters.formater import apply_format
 
