@@ -46,7 +46,7 @@ def read(file_path):
                               'tests/fixtures/file2.json',
                               'json',
                               'tests/fixtures/result_to_json_flat.txt'),
-                             ])
+                         ])
 def test_generate_diff(file_path1, file_path2, formatter, expected_result):
     assert generate_diff(file_path1, file_path2, formatter) == read(
         expected_result)
