@@ -1,14 +1,20 @@
 import yaml
 from yaml.loader import SafeLoader
 import json
+import os
 
 
-def get_data(file):
-    '''Parsing json and yaml files'''
-    if file.endswith('.json'):
-        result = json.load(open(file))
+def load_content(file_path):
+    _, extension = os.path.splitext(file_path)
+    with open(file_path, 'r') as file:
+        data = file.read()
 
-    elif file.endswith('.yml') or file.endswith('.yaml'):
-        result = yaml.load(open(file), Loader=SafeLoader)
+    return parse_content(data, extension)
 
-    return result
+
+def parse_content(data, extension):
+    if extension == '.json':
+        return json.loads(data)
+
+    elif extension == '.yml' or extension == '.yaml':
+        return yaml.load(data, Loader=SafeLoader)

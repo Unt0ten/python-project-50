@@ -1,5 +1,14 @@
-from gendiff.formatters.format_value_module import format_value
-from gendiff.internal_representation_diff import get_value, get_name, get_status
+def format_value(value):
+    '''This function formats bool and Nonetype
+        dictionary values from .py to .json.'''
+    if value is None:
+        return 'null'
+
+    elif isinstance(value, bool):
+        return str(value).lower()
+
+    else:
+        return value
 
 
 def check_complex(value):
@@ -19,9 +28,9 @@ def get_value_updated(node, status):
 
     '''
     if status == 'upd_add':
-        return format_value(get_value(node))
+        return format_value(node['value'])
     elif status == 'upd_del':
-        return format_value(get_value(node))
+        return format_value(node['value'])
 
 
 def set_quotes(value):
@@ -98,6 +107,7 @@ def plain(diff):
     :return: string as "plain" format
 
     '''
+
     def inner(diff, path):
         '''
 
@@ -105,23 +115,23 @@ def plain(diff):
         :return: string
 
         '''
-        string = ''
+        formatted_output = ''
 
         for node in diff:
 
-            name = get_name(node)
-            value = format_value(get_value(node))
-            status = get_status(node)
+            name = node['name']
+            value = format_value(node['value'])
+            status = node['status']
             path_copy = path.copy()
             path_copy.append(name)
 
             if status == 'changed':
-                string += inner(value, path_copy)
+                formatted_output += inner(value, path_copy)
 
-            string += make_string_flat(path_copy, value, status)
-            string += make_string_nested(path_copy, node, status)
+            formatted_output += make_string_flat(path_copy, value, status)
+            formatted_output += make_string_nested(path_copy, node, status)
 
-        return string
+        return formatted_output
 
     result = inner(diff, []).strip()
 

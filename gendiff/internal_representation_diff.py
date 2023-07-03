@@ -11,21 +11,6 @@ def make_node(key, value, status='unused'):
         'status': status}
 
 
-def get_value(node):
-    '''Getting node value'''
-    return node['value']
-
-
-def get_status(node):
-    """Return status of node."""
-    return node.get('status', '')
-
-
-def get_name(node):
-    """Return name of node."""
-    return node['name']
-
-
 def get_diff_data(data1, data2):
     '''Returns the difference as a dictionary with information about changes
     to keys and their values'''

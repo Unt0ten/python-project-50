@@ -1,0 +1,4 @@
+Property 'list_level_1.list_level_2' was updated. From 'element1 element2 element3' to 'element1 element2 element3 element6'
+Property 'list_level_1.list_level_3.fox' was updated. From 'red' to 'grey'
+Property 'list_level_3' was added with value: 200
+Property 'list_tree' was removed

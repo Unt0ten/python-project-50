@@ -1,13 +1,21 @@
-from gendiff.internal_representation_diff import get_status
-from gendiff.internal_representation_diff import get_name
-from gendiff.internal_representation_diff import get_value
-from gendiff.internal_representation_diff import isdict
 from gendiff.internal_representation_diff import make_node
-from gendiff.formatters.format_value_module import format_value
 
 NUM_INDENTS = 4
 SHIFT_LEFT = 2
 DIVE = 1
+
+
+def format_value(value):
+    '''This function formats bool and Nonetype
+        dictionary values from .py to .json.'''
+    if value is None:
+        return 'null'
+
+    elif isinstance(value, bool):
+        return str(value).lower()
+
+    else:
+        return value
 
 
 def get_nesting_depth(ident, status):
@@ -56,10 +64,10 @@ def make_inner(value):
     '''
     new_node = []
 
-    if isdict(value):
+    if isinstance(value, dict):
         for key in value.keys():
 
-            if isdict(value[key]):
+            if isinstance(value[key], dict):
                 node = [make_node(key, make_inner(value[key]))]
                 new_node.extend(node)
 
@@ -79,14 +87,15 @@ def stylish(diff):
     :return: string as "plain" format
 
     '''
+
     def inner(diff, ident=DIVE, symbol=' '):
         string = ''
 
         for node in diff:
 
-            name = get_name(node)
-            value = make_inner(get_value(node))
-            status = get_status(node)
+            name = node['name']
+            value = make_inner(node['value'])
+            status = node['status']
             new_name = make_new_node_name(name, status)
 
             if isinstance(value, list):

@@ -1,6 +1,6 @@
-from gendiff.formatters.stylish_module import stylish
-from gendiff.formatters.plain_module import plain
-from gendiff.formatters.json_module import make_json
+from gendiff.formatters.stylish import stylish
+from gendiff.formatters.plain import plain
+from gendiff.formatters.json import json
 
 
 def apply_format(diff, formater):
@@ -12,4 +12,4 @@ def apply_format(diff, formater):
         return plain(diff)
 
     elif formater == 'json':
-        return make_json(diff)
+        return json(diff)
