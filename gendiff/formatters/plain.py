@@ -18,21 +18,6 @@ def check_complex(value):
     return value
 
 
-def get_value_updated(node, status):
-    '''
-    Node value conversion
-
-    :param node: formed diff node
-    :param status: status of the generated diff node
-    :return: final result
-
-    '''
-    if status == 'upd_add':
-        return format_value(node['value'])
-    elif status == 'upd_del':
-        return format_value(node['value'])
-
-
 def set_quotes(value):
     '''Wrapping the value in quotes for output'''
     results = ['true', 'false', 'null', '[complex value]']
@@ -77,7 +62,7 @@ def make_string_flat(path, value, status):
     return string
 
 
-def make_string_nested(path, node, status):
+def make_string_nested(path, node):
     '''
     Formation of a line depending on the status
 
@@ -89,14 +74,9 @@ def make_string_nested(path, node, status):
     '''
     string = ''
 
-    if status == 'upd_del':
-        old = convert_value(get_value_updated(node, 'upd_del'))
-        string += f"Property '{'.'.join(path)}' was updated. From {old}"
-
-    elif status == 'upd_add':
-        new = convert_value(get_value_updated(node, 'upd_add'))
-        string += f" to {new}\n"
-
+    old = convert_value(node.get('old_value', ''))
+    new = convert_value(node.get('new_value', ''))
+    string += f"Property '{'.'.join(path)}' was updated. From {old} to {new}\n"
     return string
 
 
@@ -113,15 +93,18 @@ def plain(diff, path=[]):
     for node in diff:
 
         name = node['name']
-        value = format_value(node['value'])
+        value = format_value(node.get('value', ''))
         status = node['status']
         path_copy = path.copy()
         path_copy.append(name)
 
-        if status == 'changed':
+        if status == 'nested':
             formatted_output += f'{plain(value, path_copy)}\n'
 
-        formatted_output += make_string_flat(path_copy, value, status)
-        formatted_output += make_string_nested(path_copy, node, status)
+        elif status == 'changed':
+            formatted_output += make_string_nested(path_copy, node)
+
+        else:
+            formatted_output += make_string_flat(path_copy, value, status)
 
     return formatted_output.strip()

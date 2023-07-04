@@ -36,13 +36,14 @@ def get_diff_data(data1, data2):
             else:
                 if isdict(data1[key]) and isdict(data2[key]):
                     node = make_node(key, get_diff_data(data1[key], data2[key]),
-                                     'changed')
+                                     'nested')
                     diff.append(node)
 
                 else:
-                    node = make_node(key, data1[key], 'upd_del')
-                    diff.append(node)
-                    node = make_node(key, data2[key], 'upd_add')
+                    node = {'name': key,
+                            'old_value': data1[key],
+                            'new_value': data2[key],
+                            'status': 'changed'}
                     diff.append(node)
 
     return diff

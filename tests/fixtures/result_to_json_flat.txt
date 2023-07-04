@@ -16,13 +16,9 @@
   },
   {
     "name": "timeout",
-    "value": 50,
-    "status": "upd_del"
-  },
-  {
-    "name": "timeout",
-    "value": 20,
-    "status": "upd_add"
+    "old_value": 50,
+    "new_value": 20,
+    "status": "changed"
   },
   {
     "name": "verbose",

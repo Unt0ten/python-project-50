@@ -39,17 +39,22 @@ def make_new_node_name(name, status):
     :return: new name meaning
 
     '''
-    if status == 'changed' or status == 'unchanged':
+    if status == 'unchanged' or status == 'nested':
         new_name = '  ' + name
         return new_name
 
-    elif status == 'deleted' or status == 'upd_del':
+    elif status == 'deleted':
         new_name = '- ' + name
         return new_name
 
-    elif status == 'added' or status == 'upd_add':
+    elif status == 'added':
         new_name = '+ ' + name
         return new_name
+
+    elif status == 'changed':
+        new_name1 = '- ' + name
+        new_name2 = '+ ' + name
+        return new_name1, new_name2
 
     return name
 
@@ -80,7 +85,8 @@ def make_inner(value):
     return new_node
 
 
-def make_string(new_name, status, value, func, ident, symbol=' '):
+def make_string(new_name, status, value, func, ident):
+    symbol = ' '
     string = ''
     if isinstance(value, list):
         deep = get_nesting_depth(ident, status)
@@ -104,16 +110,25 @@ def stylish(diff):
     :return: string as "plain" format
 
     '''
+
     def inner(diff, ident=DIVE):
         string = ''
 
         for node in diff:
             name = node['name']
-            value = make_inner(node['value'])
+            value = make_inner(node.get('value', ''))
+            old_value = make_inner(node.get('old_value', ''))
+            new_value = make_inner(node.get('new_value', ''))
             status = node['status']
             new_name = make_new_node_name(name, status)
 
-            string += make_string(new_name, status, value, inner, ident)
+            if status != 'changed':
+                string += make_string(new_name, status, value, inner, ident)
+
+            else:
+                del_name, add_name = make_new_node_name(name, status)
+                string += make_string(del_name, status, old_value, inner, ident)
+                string += make_string(add_name, status, new_value, inner, ident)
 
         return string
 

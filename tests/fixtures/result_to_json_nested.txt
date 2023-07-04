@@ -19,13 +19,9 @@
       },
       {
         "name": "setting3",
-        "value": true,
-        "status": "upd_del"
-      },
-      {
-        "name": "setting3",
-        "value": null,
-        "status": "upd_add"
+        "old_value": true,
+        "new_value": null,
+        "status": "changed"
       },
       {
         "name": "setting4",
@@ -47,16 +43,12 @@
             "value": [
               {
                 "name": "wow",
-                "value": "",
-                "status": "upd_del"
-              },
-              {
-                "name": "wow",
-                "value": "so much",
-                "status": "upd_add"
+                "old_value": "",
+                "new_value": "so much",
+                "status": "changed"
               }
             ],
-            "status": "changed"
+            "status": "nested"
           },
           {
             "name": "key",
@@ -69,23 +61,19 @@
             "status": "added"
           }
         ],
-        "status": "changed"
+        "status": "nested"
       }
     ],
-    "status": "changed"
+    "status": "nested"
   },
   {
     "name": "group1",
     "value": [
       {
         "name": "baz",
-        "value": "bas",
-        "status": "upd_del"
-      },
-      {
-        "name": "baz",
-        "value": "bars",
-        "status": "upd_add"
+        "old_value": "bas",
+        "new_value": "bars",
+        "status": "changed"
       },
       {
         "name": "foo",
@@ -94,18 +82,14 @@
       },
       {
         "name": "nest",
-        "value": {
+        "old_value": {
           "key": "value"
         },
-        "status": "upd_del"
-      },
-      {
-        "name": "nest",
-        "value": "str",
-        "status": "upd_add"
+        "new_value": "str",
+        "status": "changed"
       }
     ],
-    "status": "changed"
+    "status": "nested"
   },
   {
     "name": "group2",
