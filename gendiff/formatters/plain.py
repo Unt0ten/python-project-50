@@ -100,7 +100,7 @@ def make_string_nested(path, node, status):
     return string
 
 
-def plain(diff):
+def plain(diff, path=[]):
     '''Diff output in "plain" format
 
     :param diff: formed diff in the form of a tree
@@ -108,31 +108,20 @@ def plain(diff):
 
     '''
 
-    def inner(diff, path):
-        '''
+    formatted_output = ''
 
-        :param path: path to the root of the modified value
-        :return: string
+    for node in diff:
 
-        '''
-        formatted_output = ''
+        name = node['name']
+        value = format_value(node['value'])
+        status = node['status']
+        path_copy = path.copy()
+        path_copy.append(name)
 
-        for node in diff:
+        if status == 'changed':
+            formatted_output += f'{plain(value, path_copy)}\n'
 
-            name = node['name']
-            value = format_value(node['value'])
-            status = node['status']
-            path_copy = path.copy()
-            path_copy.append(name)
+        formatted_output += make_string_flat(path_copy, value, status)
+        formatted_output += make_string_nested(path_copy, node, status)
 
-            if status == 'changed':
-                formatted_output += inner(value, path_copy)
-
-            formatted_output += make_string_flat(path_copy, value, status)
-            formatted_output += make_string_nested(path_copy, node, status)
-
-        return formatted_output
-
-    result = inner(diff, []).strip()
-
-    return result
+    return formatted_output.strip()

@@ -80,6 +80,23 @@ def make_inner(value):
     return new_node
 
 
+def make_string(new_name, status, value, func, ident, symbol=' '):
+    string = ''
+    if isinstance(value, list):
+        deep = get_nesting_depth(ident, status)
+        string += f'\n{symbol * deep}{new_name}: ' \
+                  f'{{{func(format_value(value), ident + DIVE)}'
+
+        deep = NUM_INDENTS * ident
+        string += f'\n{symbol * deep}}}'
+
+    else:
+        deep = get_nesting_depth(ident, status)
+        string += f'\n{symbol * deep}{new_name}: {format_value(value)}'
+
+    return string
+
+
 def stylish(diff):
     '''Diff output in "stylish" format
 
@@ -87,32 +104,19 @@ def stylish(diff):
     :return: string as "plain" format
 
     '''
-
-    def inner(diff, ident=DIVE, symbol=' '):
+    def inner(diff, ident=DIVE):
         string = ''
 
         for node in diff:
-
             name = node['name']
             value = make_inner(node['value'])
             status = node['status']
             new_name = make_new_node_name(name, status)
 
-            if isinstance(value, list):
-                deep = get_nesting_depth(ident, status)
-                string += f'\n{symbol * deep}{new_name}: ' \
-                          f'{{' \
-                          f'{inner(format_value(value), ident + DIVE)}'
-
-                deep = NUM_INDENTS * ident
-                string += f'\n{symbol * deep}}}'
-
-            else:
-                deep = get_nesting_depth(ident, status)
-                string += f'\n{symbol * deep}{new_name}: {format_value(value)}'
+            string += make_string(new_name, status, value, inner, ident)
 
         return string
 
-    result = inner(diff)
+    formatted_output = inner(diff)
 
-    return f'{{{result}\n}}'
+    return f'{{{formatted_output}\n}}'
