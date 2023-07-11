@@ -1,34 +1,4 @@
 def format_value(value):
-    '''This function formats bool and Nonetype
-        dictionary values from .py to .json.'''
-    if value is None:
-        return 'null'
-
-    elif isinstance(value, bool):
-        return str(value).lower()
-
-    else:
-        return value
-
-
-def check_complex(value):
-    '''Checking the node value for complexity'''
-    if isinstance(value, list) or isinstance(value, dict):
-        return "[complex value]"
-    return value
-
-
-def set_quotes(value):
-    '''Wrapping the value in quotes for output'''
-    results = ['true', 'false', 'null', '[complex value]']
-
-    if value in results or isinstance(value, int):
-        return value
-
-    return f"'{value}'"
-
-
-def convert_value(value):
     '''
     Final value conversion
 
@@ -36,75 +6,57 @@ def convert_value(value):
     :return: final result
 
     '''
-    result = set_quotes(format_value(check_complex(value)))
-    return result
+    if isinstance(value, list) or isinstance(value, dict):
+        return "[complex value]"
+
+    elif value is None:
+        return 'null'
+
+    elif isinstance(value, bool):
+        return str(value).lower()
+
+    elif not isinstance(value, int):
+        return f"'{value}'"
+
+    return value
 
 
-def make_string_flat(path, value, status):
-    '''
-    Formation of a line depending on the status
+def inner(diff, path):
+    formatted_output = ''
 
-    :param path: path to the root of the modified value
-    :param value: node value
-    :param status: status of the generated diff node
-    :return: a formed string
+    for node in diff:
 
-    '''
-    string = ''
+        value = node.get('value', '')
+        status = node['status']
+        path_copy = path.copy()
+        path_copy.append(node['name'])
 
-    if status == 'added':
-        string += f"Property '{'.'.join(path)}' " \
-                  f"was added with value: {convert_value(value)}\n"
+        if status == 'nested':
+            formatted_output += f'{inner(value, path_copy)}\n'
 
-    elif status == 'deleted':
-        string += f"Property '{'.'.join(path)}' was removed\n"
+        elif status == 'changed':
+            old = format_value(node.get('old_value', ''))
+            new = format_value(node.get('new_value', ''))
+            formatted_output += f"Property '{'.'.join(path_copy)}' " \
+                                f"was updated. From {old} to {new}\n"
 
-    return string
+        elif status == 'added':
+            formatted_output += f"Property '{'.'.join(path_copy)}' " \
+                                f"was added with value: " \
+                                f"{format_value(value)}\n"
 
+        elif status == 'deleted':
+            formatted_output += f"Property '{'.'.join(path_copy)}' " \
+                                f"was removed\n"
 
-def make_string_nested(path, node):
-    '''
-    Formation of a line depending on the status
-
-    :param path: path to the root of the modified value
-    :param node: formed diff node
-    :param status: status of the generated diff node
-    :return: a formed string
-
-    '''
-    string = ''
-
-    old = convert_value(node.get('old_value', ''))
-    new = convert_value(node.get('new_value', ''))
-    string += f"Property '{'.'.join(path)}' was updated. From {old} to {new}\n"
-    return string
+    return formatted_output.strip()
 
 
-def plain(diff, path=[]):
+def plain(diff):
     '''Diff output in "plain" format
 
     :param diff: formed diff in the form of a tree
     :return: string as "plain" format
 
     '''
-
-    formatted_output = ''
-
-    for node in diff:
-
-        name = node['name']
-        value = format_value(node.get('value', ''))
-        status = node['status']
-        path_copy = path.copy()
-        path_copy.append(name)
-
-        if status == 'nested':
-            formatted_output += f'{plain(value, path_copy)}\n'
-
-        elif status == 'changed':
-            formatted_output += make_string_nested(path_copy, node)
-
-        else:
-            formatted_output += make_string_flat(path_copy, value, status)
-
-    return formatted_output.strip()
+    return inner(diff, [])

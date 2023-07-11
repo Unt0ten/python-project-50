@@ -103,6 +103,28 @@ def make_string(new_name, status, value, func, ident):
     return string
 
 
+def inner(diff, ident=DIVE):
+    string = ''
+
+    for node in diff:
+        name = node['name']
+        value = make_inner(node.get('value', ''))
+        status = node['status']
+        new_name = make_new_node_name(name, status)
+
+        if status != 'changed':
+            string += make_string(new_name, status, value, inner, ident)
+
+        else:
+            del_name, add_name = make_new_node_name(name, status)
+            old_value = make_inner(node.get('old_value', ''))
+            new_value = make_inner(node.get('new_value', ''))
+            string += make_string(del_name, status, old_value, inner, ident)
+            string += make_string(add_name, status, new_value, inner, ident)
+
+    return string
+
+
 def stylish(diff):
     '''Diff output in "stylish" format
 
@@ -110,27 +132,6 @@ def stylish(diff):
     :return: string as "plain" format
 
     '''
-
-    def inner(diff, ident=DIVE):
-        string = ''
-
-        for node in diff:
-            name = node['name']
-            value = make_inner(node.get('value', ''))
-            old_value = make_inner(node.get('old_value', ''))
-            new_value = make_inner(node.get('new_value', ''))
-            status = node['status']
-            new_name = make_new_node_name(name, status)
-
-            if status != 'changed':
-                string += make_string(new_name, status, value, inner, ident)
-
-            else:
-                del_name, add_name = make_new_node_name(name, status)
-                string += make_string(del_name, status, old_value, inner, ident)
-                string += make_string(add_name, status, new_value, inner, ident)
-
-        return string
 
     formatted_output = inner(diff)
 
