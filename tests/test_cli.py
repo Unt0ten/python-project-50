@@ -25,8 +25,7 @@ def test_parse_args_first_file(get_data):
         first_file,
         second_file,
         '-f',
-        format,
-        ]
+        format]
     args = parse_args()
     assert args.first_file == first_file
 
@@ -38,8 +37,7 @@ def test_parse_args_second_file(get_data):
         first_file,
         second_file,
         '-f',
-        format,
-        ]
+        format]
     args = parse_args()
     assert args.second_file == second_file
 
@@ -51,8 +49,7 @@ def test_parse_args_format(get_data):
         first_file,
         second_file,
         '-f',
-        format,
-        ]
+        format]
     args = parse_args()
     assert args.format == format
 
