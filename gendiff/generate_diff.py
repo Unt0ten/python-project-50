@@ -1,9 +1,9 @@
 from gendiff.internal_representation_diff import get_diff_data
 from gendiff.parser_files import load_content
-from gendiff.formater import apply_format
+from gendiff.formatter import apply_format
 
 
-def generate_diff(file_path1, file_path2, formater='stylish'):
+def generate_diff(file_path1, file_path2, formatter='stylish'):
     '''Diff generator and its output in the selected formatter
     (default 'stylish')
 
@@ -15,5 +15,5 @@ def generate_diff(file_path1, file_path2, formater='stylish'):
     '''
     data1, data2 = load_content(file_path1), load_content(file_path2)
     diff = get_diff_data(data1, data2)
-    result = apply_format(diff, formater)
+    result = apply_format(diff, formatter)
     return result

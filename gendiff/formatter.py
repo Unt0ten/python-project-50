@@ -3,13 +3,13 @@ from gendiff.formatters.plain import plain
 from gendiff.formatters.json import json
 
 
-def apply_format(diff, formater):
+def apply_format(diff, formatter):
     '''Choice of formatters (default "stylish")'''
-    if formater == 'stylish':
+    if formatter == 'stylish':
         return stylish(diff)
 
-    elif formater == 'plain':
+    elif formatter == 'plain':
         return plain(diff)
 
-    elif formater == 'json':
+    elif formatter == 'json':
         return json(diff)

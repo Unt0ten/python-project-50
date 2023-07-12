@@ -9,7 +9,7 @@ def main():
     parser = parse_args()
     print(
         generate_diff(parser.first_file, parser.second_file,
-                      formater=parser.format))
+                      formatter=parser.format))
 
 
 if __name__ == '__main__':
