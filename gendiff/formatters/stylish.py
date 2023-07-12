@@ -40,16 +40,13 @@ def make_new_node_name(name, status):
 
     '''
     if status == 'unchanged' or status == 'nested':
-        new_name = '  ' + name
-        return new_name
+        name = '  ' + name
 
     elif status == 'deleted':
-        new_name = '- ' + name
-        return new_name
+        name = '- ' + name
 
     elif status == 'added':
-        new_name = '+ ' + name
-        return new_name
+        name = '+ ' + name
 
     elif status == 'changed':
         new_name1 = '- ' + name

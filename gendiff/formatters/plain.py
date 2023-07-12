@@ -7,16 +7,16 @@ def format_value(value):
 
     '''
     if isinstance(value, list) or isinstance(value, dict):
-        return "[complex value]"
+        value = "[complex value]"
 
     elif value is None:
-        return 'null'
+        value = 'null'
 
     elif isinstance(value, bool):
-        return str(value).lower()
+        value = str(value).lower()
 
     elif not isinstance(value, int):
-        return f"'{value}'"
+        value = f"'{value}'"
 
     return value
 
