@@ -4,12 +4,6 @@ import sys
 import os
 
 
-def read(file_path):
-    with open(file_path, 'r') as f:
-        result = f.read()
-    return result
-
-
 @pytest.fixture
 def get_data():
     first_file = 'tests/fixtures/file1_nested.json'
