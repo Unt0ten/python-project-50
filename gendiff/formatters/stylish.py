@@ -71,7 +71,6 @@ def check_nesting(value, ident, symbol=' ', string=''):
 def remove_superfluous(string):
     search_string = '}{'
     list_ = string.split('\n')
-    print(list_)
     for char in list_:
         if char.strip() == search_string:
             list_.remove(char)
