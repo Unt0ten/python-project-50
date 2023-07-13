@@ -1,5 +1,3 @@
-from gendiff.internal_representation_diff import make_node
-
 NUM_INDENTS = 4
 SHIFT_LEFT = 2
 DIVE = 1
