@@ -3,6 +3,8 @@ import pytest
 import sys
 import os
 
+POSITIVE_RESULT = 0
+
 
 @pytest.fixture
 def get_data():
@@ -50,4 +52,4 @@ def test_parse_args_format(get_data):
 
 def test_cli_launch():
     command = os.system('poetry run gendiff -h')
-    assert command == 0
+    assert command == POSITIVE_RESULT

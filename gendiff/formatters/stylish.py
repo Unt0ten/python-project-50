@@ -26,7 +26,7 @@ def get_nesting_depth(ident, status):
     :return: indent length
 
     '''
-    if status != 'unused':
+    if status is not None:
         return ident * NUM_INDENTS - SHIFT_LEFT
     return ident * NUM_INDENTS
 
@@ -56,68 +56,61 @@ def make_new_node_name(name, status):
     return name
 
 
-def make_inner(value):
-    '''Formation of the internal representation
-        of the node not included in the diff
-
-    :param value: node value
-    :return: new node
-
-    '''
-    new_node = []
-
+def check_nesting(value, ident, symbol=' ', string=''):
     if isinstance(value, dict):
-        for key in value.keys():
+        for k, v in value.items():
+            deep = NUM_INDENTS + ident + SHIFT_LEFT
+            string += f'{{\n{symbol * deep}{k}: ' \
+                      f'{check_nesting(format_value(v), ident + NUM_INDENTS)}'
+            string += f'\n{symbol * (ident + SHIFT_LEFT)}}}'
 
-            if isinstance(value[key], dict):
-                node = [make_node(key, make_inner(value[key]))]
-                new_node.extend(node)
-
-            else:
-                node = [make_node(key, value[key])]
-                new_node.extend(node)
-    else:
-        new_node = value
-
-    return new_node
-
-
-def make_string(new_name, status, value, func, ident):
-    symbol = ' '
-    string = ''
-    if isinstance(value, list):
-        deep = get_nesting_depth(ident, status)
-        string += f'\n{symbol * deep}{new_name}: ' \
-                  f'{{{func(format_value(value), ident + DIVE)}'
-
-        deep = NUM_INDENTS * ident
-        string += f'\n{symbol * deep}}}'
+        return remove_superfluous(string)
 
     else:
-        deep = get_nesting_depth(ident, status)
-        string += f'\n{symbol * deep}{new_name}: {format_value(value)}'
+        return value
 
-    return string
+
+def remove_superfluous(string):
+    search_string = '}{'
+    list_ = string.split('\n')
+    print(list_)
+    for char in list_:
+        if char.strip() == search_string:
+            list_.remove(char)
+    return '\n'.join(list_)
 
 
 def inner(diff, ident=DIVE):
     string = ''
+    symbol = ' '
 
     for node in diff:
-        name = node['name']
-        value = make_inner(node.get('value', ''))
-        status = node['status']
+        name = node.get('name')
+        value = format_value(node.get('value'))
+        status = node.get('status')
         new_name = make_new_node_name(name, status)
 
-        if status != 'changed':
-            string += make_string(new_name, status, value, inner, ident)
+        if status == 'nested':
+            deep = get_nesting_depth(ident, status)
+            string += f'\n{symbol * deep}{new_name}: ' \
+                      f'{{{inner(check_nesting(value, deep), ident + DIVE)}'
+            deep = NUM_INDENTS * ident
+            string += f'\n{symbol * deep}}}'
 
-        else:
+        elif status == 'added' or status == 'deleted' or status == 'unchanged':
+            deep = get_nesting_depth(ident, status)
+            string += f'\n{symbol * deep}{new_name}: ' \
+                      f'{check_nesting(value, deep)}'
+
+        elif status == 'changed':
             del_name, add_name = make_new_node_name(name, status)
-            old_value = make_inner(node.get('old_value', ''))
-            new_value = make_inner(node.get('new_value', ''))
-            string += make_string(del_name, status, old_value, inner, ident)
-            string += make_string(add_name, status, new_value, inner, ident)
+            old_value = format_value(node.get('old_value'))
+            new_value = format_value(node.get('new_value'))
+            deep = get_nesting_depth(ident, status)
+            string += f'\n{symbol * deep}{del_name}: ' \
+                      f'{check_nesting(old_value, deep)}'
+            string += f'\n{symbol * deep}{add_name}: ' \
+                      f'{check_nesting(new_value, deep)}'
 
     return string
 
@@ -126,7 +119,7 @@ def stylish(diff):
     '''Diff output in "stylish" format
 
     :param diff: formed diff in the form of a tree
-    :return: string as "plain" format
+    :return: string as "stylish" format
 
     '''
 
