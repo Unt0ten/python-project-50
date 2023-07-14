@@ -9,7 +9,7 @@ def generate_diff(file_path1, file_path2, formatter='stylish'):
 
     :param file_path1: path to first file
     :param file_path2: path to second file
-    :param formater: formater selection "stylish"/"plain"/"json"
+    :param formatter: selection format "stylish"/"plain"/"json"
     :return: final diff output
 
     '''
