@@ -12,8 +12,7 @@ def format_value(value):
     elif isinstance(value, bool):
         return str(value).lower()
 
-    else:
-        return value
+    return value
 
 
 def get_nesting_depth(ident, status):
@@ -64,8 +63,7 @@ def check_nesting(value, ident, symbol=' ', string=''):
 
         return remove_superfluous(string)
 
-    else:
-        return value
+    return value
 
 
 def remove_superfluous(string):
@@ -74,6 +72,7 @@ def remove_superfluous(string):
     for char in list_:
         if char.strip() == search_string:
             list_.remove(char)
+
     return '\n'.join(list_)
 
 
