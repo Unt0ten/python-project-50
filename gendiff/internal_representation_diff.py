@@ -3,7 +3,7 @@ def isdict(data):
     return isinstance(data, dict)
 
 
-def make_node(key, value, status='unused'):
+def make_node(key, value, status):
     """Return node"""
     return {
         'name': key,
