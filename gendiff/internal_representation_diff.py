@@ -28,22 +28,20 @@ def get_diff_data(data1, data2):
             node = make_node(key, data2[key], 'added')
             diff.append(node)
 
+        elif data1[key] == data2[key]:
+            node = make_node(key, data1[key], 'unchanged')
+            diff.append(node)
+
+        elif isdict(data1[key]) and isdict(data2[key]):
+            node = make_node(key, get_diff_data(data1[key], data2[key]),
+                             'nested')
+            diff.append(node)
+
         else:
-            if data1[key] == data2[key]:
-                node = make_node(key, data1[key], 'unchanged')
-                diff.append(node)
-
-            else:
-                if isdict(data1[key]) and isdict(data2[key]):
-                    node = make_node(key, get_diff_data(data1[key], data2[key]),
-                                     'nested')
-                    diff.append(node)
-
-                else:
-                    node = {'name': key,
-                            'old_value': data1[key],
-                            'new_value': data2[key],
-                            'status': 'changed'}
-                    diff.append(node)
+            node = {'name': key,
+                    'old_value': data1[key],
+                    'new_value': data2[key],
+                    'status': 'changed'}
+            diff.append(node)
 
     return diff
