@@ -1,12 +1,7 @@
 .venv/
 .venv
-gendiff/scripts/__pycache__
-gendiff/__pycache__
-gendiff/formatters/__pycache__
-tests/__pycache__/
-/dist/
-dist/*
-dist/hexlet_code-0.1.0-py3-none-any.whl
+__pycache__/
+dist/
 .idea/
 .coverage
 coverage.xml

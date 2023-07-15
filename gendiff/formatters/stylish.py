@@ -57,23 +57,12 @@ def check_nesting(value, ident, symbol=' ', string=''):
     if isinstance(value, dict):
         for k, v in value.items():
             deep = NUM_INDENTS + ident + SHIFT_LEFT
-            string += f'{{\n{symbol * deep}{k}: ' \
+            string += f'\n{symbol * deep}{k}: ' \
                       f'{check_nesting(format_value(v), ident + NUM_INDENTS)}'
-            string += f'\n{symbol * (ident + SHIFT_LEFT)}}}'
 
-        return remove_superfluous(string)
+        return f'{{{string}\n{symbol * (ident + SHIFT_LEFT)}}}'
 
     return value
-
-
-def remove_superfluous(string):
-    search_string = '}{'
-    list_ = string.split('\n')
-    for char in list_:
-        if char.strip() == search_string:
-            list_.remove(char)
-
-    return '\n'.join(list_)
 
 
 def inner(diff, ident=DIVE):
